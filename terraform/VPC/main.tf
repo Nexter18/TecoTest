@@ -27,7 +27,9 @@ resource "aws_internet_gateway" "gw" {
 }
 
 # Creating Route Table
-resource "aws_route_table" "r" {
+
+  #Public Route Table
+resource "aws_route_table" "public_route" {
   vpc_id = aws_vpc.main.id
 
   route {
@@ -36,11 +38,23 @@ resource "aws_route_table" "r" {
   }
 
   tags = {
-    Name = "teco_test_tf_rt"
+    Name = "teco_test_tf_public_rt"
+  }
+}
+
+# Private Route Table
+
+resource "aws_default_route_table" "private_route" {
+  default_route_table_id = aws_vpc.main.default_route_table_id
+
+  tags = {
+    Name = "my-private-route-table"
   }
 }
 
 # Creating Subnet
+
+  #Public Subnet
 resource "aws_subnet" "public_subnet" {
   count                   = 2
   vpc_id                  = aws_vpc.main.id
@@ -49,17 +63,38 @@ resource "aws_subnet" "public_subnet" {
   availability_zone       = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    name = "teco_test_tf_subnet-${count.index + 1}"
+    name = "teco_test_tf_public_subnet-${count.index + 1}"
+  }
+}
+  
+  #Private Subnet 
+resource "aws_subnet" "private_subnet" {
+  count                   = 2
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.private_cidrs[count.index]
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
+
+  tags = {
+    name = "teco_test_tf_private_subnet-${count.index + 1}"
   }
 }
 
 # Subnet Route Table Asociation
 
-resource "aws_route_table_association" "a" {
+  #Public RT Association
+resource "aws_route_table_association" "public_subnet_assoc" {
   count          = length(aws_subnet.public_subnet)
   subnet_id      = aws_subnet.public_subnet.*.id[count.index]
   route_table_id = aws_route_table.r.id
   depends_on     = [aws_route_table.r, aws_subnet.public_subnet]
+}
+
+  #Private RT Association
+resource "aws_route_table_association" "private_subnet_assoc" {
+  count          = length(aws_subnet.private_subnet)
+  subnet_id      = aws_subnet.private_subnet.*.id[count.index]
+  route_table_id = aws_route_table.r.id
+  depends_on     = [aws_route_table.r, aws_subnet.private_subnet]
 }
 
 # Security Group
