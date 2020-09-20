@@ -4,24 +4,21 @@ provider "aws" {
 
 data "aws_availability_zones" "available" {}
 
-data "aws_ami" "centos" {
-  owners      = ["771329597953"]
+data "aws_ami" "packer_image" {
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["CentOS Linux 7*"]
+    values = ["example-ami-packer"]
   }
 
   filter {
-    name   = "architecture"
-    values = ["x86_64"]
+    name   = "virtualization-type"
+    values = ["hvm"]
   }
 
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
-  }
+  owners = ["771329597953"] #Canonical
+
 }
 
 resource "aws_key_pair" "tecotest_key" {

@@ -25,3 +25,11 @@ output "private_subnet1" {
 output "private_subnet2" {
   value = element(aws_subnet.private_subnet.*.id, 2 )
 }
+
+output "curl" {
+  value = "curl http://${aws_instance.ec2.public_ip}"
+}
+
+output "Login-with-Key" {
+  value = "ssh -i ${aws_key_pair.sshkey.key_name} ubuntu@${aws_instance.ec2.public_ip}"
+}
