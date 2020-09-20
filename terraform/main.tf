@@ -7,7 +7,6 @@ module "vpc" {
   cidr_range_vpc = "10.0.0.0/16"
   public_cidrs   = ["10.0.1.0/24", "10.0.2.0/24"]
   private_cidrs  = ["10.0.3.0/24", "10.0.4.0/24"]
-  #transit_gateway = module.transit_gateway.transit_gateway
 }
 
 module "ec2" {
@@ -22,8 +21,7 @@ module "elb" {
   source = "./elb"
   vpc_id = module.vpc.vpc_id
 
-  #  instance1_id = "${module.ec2.instance1_id}"
-  #  instance2_id = "${module.ec2.instance2_id}"
+
   security_group = module.vpc.security_group
 
   subnet1 = module.vpc.subnet1
