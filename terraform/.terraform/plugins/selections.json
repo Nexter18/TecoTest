@@ -2,5 +2,9 @@
   "registry.terraform.io/hashicorp/aws": {
     "hash": "h1:CqCPQZtUHoxSAxZsMMDhg+aw4BY1yePlpC0vsejbLHA=",
     "version": "3.7.0"
+  },
+  "registry.terraform.io/hashicorp/template": {
+    "hash": "h1:lO54Pe0jzahDJw+lGJC78uRc+Kuq9t/JxCDNtbSgr1o=",
+    "version": "2.1.2"
   }
 }

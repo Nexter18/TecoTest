@@ -3,9 +3,9 @@ provider "aws" {
 }
 
 # Create a new load balancer
-resource "aws_elb" "teco_tes_elb" {
+resource "aws_elb" "teco_tes_tf_elb" {
   name               = "tecotest-terraform-elb"
-  availability_zones = ["us-west-1a", "us-west-1b", "us-west-1c"]
+  availability_zones = ["us-west-1b", "us-west-1c"]
   security_groups =  [var.security_group]
 
   subnets = [
@@ -42,7 +42,6 @@ resource "aws_elb" "teco_tes_elb" {
     interval            = 30
   }
 
-  instances                   = aws_instance.teco_test_instance.*.id[count.index]
   cross_zone_load_balancing   = true
   idle_timeout                = 400
   connection_draining         = true

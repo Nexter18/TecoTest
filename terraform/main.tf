@@ -3,9 +3,10 @@ provider "aws" {
 }
 
 module "vpc" {
-  source       = "./vpc"
-  vpc_cidr     = "10.0.0.0/16"
-  public_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
+  source         = "./vpc"
+  cidr_range_vpc = "10.0.0.0/16"
+  public_cidrs   = ["10.0.1.0/24", "10.0.2.0/24"]
+  private_cidrs  = ["10.0.3.0/24", "10.0.4.0/24"]
   #transit_gateway = module.transit_gateway.transit_gateway
 }
 
@@ -31,10 +32,11 @@ module "elb" {
 }
 
 module "auto_scaling" {
-  source  = "./auto_scaling"
-  vpc_id  = module.vpc.vpc_id
-  subnet1 = module.vpc.subnet1
-  subnet2 = module.vpc.subnet2
+  source         = "./auto_scaling"
+  vpc_id         = module.vpc.vpc_id
+  security_group = module.vpc.security_group
+  subnet1        = module.vpc.subnet1
+  subnet2        = module.vpc.subnet2
 }
 
 module "sns_topic" {

@@ -4,13 +4,13 @@ provider "aws" {
 
 data "aws_availability_zones" "available" {}
 
-data "aws_ami" "ubuntu" {
+data "aws_ami" "centos" {
   owners      = ["771329597953"]
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["CentOS Linux 7 x86_64 HVM EBS *"]
+    values = ["CentOS Linux 7*"]
   }
 
   filter {
@@ -30,7 +30,7 @@ resource "aws_key_pair" "tecotest_key" {
 }
 
 data "template_file" "init" {
-  template = file({path.module}/userdata.tpl)
+  template = file("${path.module}/userdata.tpl")
 }
 
 resource "aws_instance" "teco_test_instance" {
@@ -43,7 +43,7 @@ resource "aws_instance" "teco_test_instance" {
   user_data              = data.template_file.init.rendered
 
   tags = {
-    Name = "my-instance-${count.index + 1}"
+    Name = "teco_test_instance-${count.index + 1}"
   }
 }
 

@@ -48,7 +48,7 @@ resource "aws_default_route_table" "private_route" {
   default_route_table_id = aws_vpc.main.default_route_table_id
 
   tags = {
-    Name = "my-private-route-table"
+    Name = "teco_test_tf_private_rt"
   }
 }
 
@@ -85,16 +85,16 @@ resource "aws_subnet" "private_subnet" {
 resource "aws_route_table_association" "public_subnet_assoc" {
   count          = length(aws_subnet.public_subnet)
   subnet_id      = aws_subnet.public_subnet.*.id[count.index]
-  route_table_id = aws_route_table.r.id
-  depends_on     = [aws_route_table.r, aws_subnet.public_subnet]
+  route_table_id = aws_route_table.public_route.id
+  depends_on     = [aws_route_table.public_route, aws_subnet.public_subnet]
 }
 
   #Private RT Association
 resource "aws_route_table_association" "private_subnet_assoc" {
   count          = length(aws_subnet.private_subnet)
   subnet_id      = aws_subnet.private_subnet.*.id[count.index]
-  route_table_id = aws_route_table.r.id
-  depends_on     = [aws_route_table.r, aws_subnet.private_subnet]
+  route_table_id = aws_default_route_table.private_route.id
+  depends_on     = [aws_default_route_table.private_route, aws_subnet.private_subnet]
 }
 
 # Security Group

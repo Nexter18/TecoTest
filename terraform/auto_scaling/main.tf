@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_launch_configuration" "teco_test_launch_config" {
-  image_id        = "ami-01ed306a12b7d1c96" #Get the ID from Packer automation
+  image_id        = "ami-098f55b4287a885ba" #Get the ID from Packer automation
   instance_type   = "t2.micro"
   security_groups = [var.security_group]
 

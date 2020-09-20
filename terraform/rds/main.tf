@@ -17,7 +17,7 @@ resource "aws_db_instance" "teco_test_sql" {
   backup_retention_period = 10
   backup_window = "09:46-10:16"
   db_subnet_group_name = aws_db_subnet_group.teco_test_rds_db_subnet.name
-  vpc_security_group_ids = ["${aws_security_group.teco_test_rds_sg.id}"]
+  vpc_security_group_ids = [aws_security_group.teco_test_rds_sg.id]
 }
 
 resource "aws_db_subnet_group" "teco_test_rds_db_subnet" {
